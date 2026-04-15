@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* RESET e configurações mobile-first */
         * {
             margin: 0;
             padding: 0;
@@ -22,7 +21,6 @@
             overflow-x: hidden;
         }
         
-        /* Mobile-first: cards em 1 coluna no telemóvel */
         .products-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -30,7 +28,6 @@
             padding: 0 0.75rem;
         }
         
-        /* Tablet: 2 colunas */
         @media (min-width: 640px) {
             .products-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -39,7 +36,6 @@
             }
         }
         
-        /* Desktop pequeno: 3 colunas */
         @media (min-width: 1024px) {
             .products-grid {
                 grid-template-columns: repeat(3, 1fr);
@@ -48,7 +44,6 @@
             }
         }
         
-        /* Desktop grande: 4 colunas */
         @media (min-width: 1280px) {
             .products-grid {
                 grid-template-columns: repeat(4, 1fr);
@@ -58,7 +53,6 @@
             }
         }
         
-        /* Cards otimizados para mobile */
         .product-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(4px);
@@ -81,7 +75,6 @@
             }
         }
         
-        /* Container da imagem */
         .image-container {
             position: relative;
             background: #f3f4f6;
@@ -113,7 +106,6 @@
             transition: transform 0.2s ease;
         }
         
-        /* Badge de desconto */
         .discount-badge {
             position: absolute;
             top: 8px;
@@ -138,7 +130,6 @@
             }
         }
         
-        /* Preços */
         .old-price {
             text-decoration: line-through;
             color: #9ca3af;
@@ -163,7 +154,6 @@
             .normal-price { font-size: 1rem; }
         }
         
-        /* Botão Amazon */
         .btn-amazon {
             background: linear-gradient(95deg, #FF9900, #FFAD33);
             transition: all 0.2s;
@@ -189,7 +179,6 @@
             }
         }
         
-        /* Header mobile */
         .header-container {
             padding: 1rem 0.75rem;
         }
@@ -208,7 +197,6 @@
             }
         }
         
-        /* Barra de pesquisa */
         .search-input {
             width: 100%;
             padding: 0.75rem 1rem 0.75rem 2.5rem;
@@ -218,7 +206,6 @@
             font-size: 0.9rem;
         }
         
-        /* Filtros - scroll horizontal no mobile */
         .filters-wrapper {
             overflow-x: auto;
             overflow-y: hidden;
@@ -254,6 +241,7 @@
             font-weight: 500;
             transition: all 0.2s;
             white-space: nowrap;
+            cursor: pointer;
         }
         
         @media (min-width: 640px) {
@@ -278,7 +266,6 @@
             transform: scale(0.95);
         }
         
-        /* Descrição com limite de linhas */
         .desc-clamp {
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -295,7 +282,6 @@
             }
         }
         
-        /* Loading spinner */
         .loading-spinner {
             border: 3px solid #f3f3f3;
             border-top: 3px solid #FF9900;
@@ -311,7 +297,6 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Títulos */
         h1 {
             font-size: 1.6rem;
             font-weight: 800;
@@ -334,7 +319,6 @@
             .subtitle { font-size: 0.95rem; }
         }
         
-        /* Footer */
         .footer-text {
             font-size: 0.7rem;
         }
@@ -343,7 +327,6 @@
             .footer-text { font-size: 0.75rem; }
         }
         
-        /* Categoria badge */
         .category-badge {
             font-size: 0.65rem;
             padding: 3px 10px;
@@ -358,7 +341,6 @@
             }
         }
         
-        /* Título do produto */
         .product-title {
             font-size: 0.9rem;
             font-weight: 700;
@@ -382,7 +364,6 @@
             font-size: 0.8rem;
         }
         
-        /* Ajuste de padding para mobile */
         .content-padding {
             padding-left: 0.75rem;
             padding-right: 0.75rem;
@@ -399,7 +380,6 @@
 <body>
 
     <main>
-        <!-- HEADER MOBILE-FIRST -->
         <div class="header-container">
             <div class="text-center">
                 <h1 class="bg-gradient-to-r from-[#0f2b3d] to-[#1e4a6e] bg-clip-text text-transparent">
@@ -408,7 +388,6 @@
                 <p class="subtitle mt-1">Os melhores produtos da Amazon · Preços direto da planilha</p>
             </div>
             
-            <!-- Barra de pesquisa -->
             <div class="mt-4">
                 <div class="relative">
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
@@ -421,7 +400,6 @@
             </div>
         </div>
 
-        <!-- FILTROS (scroll horizontal no mobile) -->
         <div class="filters-wrapper">
             <div class="filters-container">
                 <button data-category="all" class="filter-btn filter-active" id="filterAll">Todos</button>
@@ -429,23 +407,15 @@
             </div>
         </div>
 
-        <!-- LOADING -->
         <div id="loadingSpinner" class="loading-spinner"></div>
-
-        <!-- GRADE DE PRODUTOS -->
         <div id="productsGrid" class="products-grid hidden"></div>
-
-        <!-- MENSAGEM SEM RESULTADOS -->
         <div id="noResultsMsg" class="text-center py-12 hidden">
             <i class="fas fa-box-open text-4xl text-gray-300 mb-2"></i>
             <p class="text-gray-500">Nenhum produto encontrado 😕</p>
             <p class="text-gray-400 text-xs mt-1">Tente outra busca ou categoria</p>
         </div>
-
-        <!-- MENSAGEM DE ERRO -->
         <div id="errorMsg" class="hidden"></div>
 
-        <!-- RODAPÉ -->
         <footer class="text-center py-6 mt-6 border-t border-gray-200/70 content-padding">
             <p class="footer-text text-gray-500">✨ Como Associado da Amazon, ganho com compras qualificadas.</p>
             <p class="footer-text text-gray-400 mt-2">© 2025 TechOfertas · Links de afiliado direcionam à Amazon</p>
@@ -498,6 +468,7 @@
                 
                 products = parseSheetData(data.values);
                 console.log(`✅ ${products.length} produtos carregados`);
+                console.log("📦 Primeiro produto:", products[0]);
                 
             } catch (error) {
                 console.error("❌ Erro:", error);
@@ -513,16 +484,17 @@
             const headers = rows[0].map(h => String(h).toLowerCase().trim());
             console.log("📋 Cabeçalhos:", headers);
             
-            // Índices fixos por posição (como indicaste)
+            // Índices das colunas (0-based)
+            // A=0, B=1, C=2, D=3, E=4, F=5, G=6
             const titleIdx = 0;
             const imgIdx = 1;
             const precoIdx = 2;      // Coluna C - preço normal
             const promocaoIdx = 3;    // Coluna D - preço promoção
             const linkIdx = 4;
             const catIdx = 5;
-            const obsIdx = 6;
+            const obsIdx = 6;         // Coluna G - descontos/obs
             
-            console.log("🎯 Mapeamento: preco índice", precoIdx, "promocao índice", promocaoIdx);
+            console.log("🎯 Índices:", { titleIdx, imgIdx, precoIdx, promocaoIdx, linkIdx, catIdx, obsIdx });
             
             const productsArray = [];
             
@@ -539,13 +511,16 @@
                     if (imgUrl.startsWith("http")) img = imgUrl;
                 }
                 
+                // Ler desconto da coluna obs (índice 6)
+                const desconto = row[obsIdx] ? String(row[obsIdx]).trim() : "";
+                
                 productsArray.push({
                     title: title,
                     img: img,
-                    desc: row[2] ? String(row[2]).trim() : "",
+                    desc: row[2] ? String(row[2]).trim() : "",  // descrição está na coluna C? Ajustar se necessário
                     link: row[linkIdx] ? String(row[linkIdx]).trim() : "#",
                     category: row[catIdx] ? String(row[catIdx]).trim() : "Geral",
-                    obs: row[obsIdx] ? String(row[obsIdx]).trim() : "",
+                    obs: desconto,  // ← DESCONTO AQUI!
                     preco: row[precoIdx] ? String(row[precoIdx]).trim() : "",
                     precoPromo: row[promocaoIdx] ? String(row[promocaoIdx]).trim() : ""
                 });
@@ -605,7 +580,12 @@
             let html = "";
             for (let p of prods) {
                 let imgUrl = p.img && p.img.startsWith("http") ? p.img : "https://placehold.co/400x300?text=Imagem";
-                let discountHtml = p.obs ? `<div class="discount-badge"><i class="fas fa-tag mr-1"></i> ${escapeHtml(p.obs)}</div>` : "";
+                
+                // BADGE DE DESCONTO - usa a coluna obs
+                let discountHtml = "";
+                if (p.obs && p.obs.trim() !== "") {
+                    discountHtml = `<div class="discount-badge"><i class="fas fa-tag mr-1"></i> ${escapeHtml(p.obs)}</div>`;
+                }
                 
                 let priceHtml = "";
                 const hasPromo = p.precoPromo && p.precoPromo.trim() !== "";
