@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Amazon Afiliados · TechOfertas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(145deg, #f9fafc 0%, #f1f5f9 100%); }
+        .card-hover { transition: all 0.25s ease; }
+        .card-hover:hover { transform: translateY(-6px); box-shadow: 0 25px 35px -12px rgba(0, 0, 0, 0.15); }
+        .filter-active { background: linear-gradient(105deg, #0f172a, #1e293b); color: white; box-shadow: 0 8px 18px rgba(0,0,0,0.08); border-color: transparent; }
+        .filter-inactive { background: white; color: #1e293b; border: 1px solid #e2e8f0; transition: all 0.2s; }
+        .filter-inactive:hover { background: #f8fafc; border-color: #cbd5e1; transform: scale(0.97); }
+        .btn-amazon { background: linear-gradient(95deg, #FF9900, #FFAD33); box-shadow: 0 4px 10px rgba(255, 153, 0, 0.25); transition: all 0.2s; }
+        .btn-amazon:hover { background: linear-gradient(95deg, #FF8C00, #FFA01E); transform: translateY(-2px); box-shadow: 0 10px 18px rgba(255, 153, 0, 0.35); }
+        .desc-clamp { display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .product-card:hover img { transform: scale(1.02); }
+        .discount-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, #FF416C, #FF4B2B);
+            color: white;
+            font-weight: 800;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+            border-radius: 40px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 10;
+            backdrop-filter: blur(2px);
+            white-space: nowrap;
+        }
+        .old-price {
+            text-decoration: line-through;
+            color: #9ca3af;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+        .promo-price {
+            color: #ef4444;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .normal-price {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 1rem;
+        }
+        .price-section {
+            margin: 0.5rem 0 0.25rem 0;
+        }
+        .no-results { animation: fadeInUp 0.3s; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
+        .loading-spinner { border: 3px solid #f3f3f3; border-top: 3px solid #FF9900; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 2rem auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        img { background: #f3f4f6; }
+        .error-message { background: #fee2e2; border-left: 4px solid #ef4444; padding: 1rem; border-radius: 0.5rem; margin: 1rem 0; }
+    </style>
+</head>
+<body>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div class="relative mb-10 md:mb-12">
+            <div class="text-center md:text-left md:flex md:justify-between md:items-end gap-6 flex-wrap">
+                <div class="mb-5 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#0f2b3d] to-[#1e4a6e] bg-clip-text text-transparent">
+                        Tech<span class="text-[#FF9900]">Ofertas</span>
+                    </h1>
+                    <p class="text-gray-600 mt-2 max-w-xl text-base md:text-lg font-medium">Os melhores produtos da Amazon · Preços direto da planilha</p>
+                </div>
+                <div class="relative w-full md:w-80 lg:w-96">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                        <input type="text" id="searchInput" placeholder="Buscar produtos..." 
+                               class="w-full pl-11 pr-10 py-3 rounded-2xl border border-gray-200 bg-white/80 backdrop-blur-sm shadow-sm focus:ring-2 focus:ring-[#FF9900]/40 focus:border-[#FF9900] outline-none transition">
+                        <button id="clearSearchBtn" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 hidden">
+                            <i class="fas fa-times-circle text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-10">
+            <div class="flex flex-wrap gap-3 justify-center md:justify-start items-center">
+                <span class="text-sm font-semibold text-gray-500 mr-1 hidden sm:inline-block"><i class="fas fa-filter mr-1"></i>Filtrar:</span>
+                <button data-category="all" class="filter-btn rounded-full px-5 py-2 text-sm font-medium transition-all shadow-sm filter-active" id="filterAll">Todos</button>
+                <div id="dynamicCategoryButtons" class="flex flex-wrap gap-3"></div>
+            </div>
+        </div>
+
+        <div id="loadingSpinner" class="loading-spinner"></div>
+        <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7 auto-rows-fr hidden"></div>
+        <div id="noResultsMsg" class="text-center py-16 hidden no-results">
+            <i class="fas fa-box-open text-5xl text-gray-300 mb-3"></i>
+            <p class="text-gray-500 text-lg">Nenhum produto encontrado 😕</p>
+            <p class="text-gray-400 text-sm">Tente outra busca ou categoria.</p>
+        </div>
+        <div id="errorMsg" class="hidden"></div>
+
+        <footer class="mt-16 pt-8 border-t border-gray-200/70 text-center">
+            <p class="text-sm text-gray-500 font-medium">✨ Como Associado da Amazon, ganho com compras qualificadas.</p>
+            <p class="text-xs text-gray-400 mt-3">© 2025 TechOfertas · Links de afiliado direcionam à Amazon</p>
+        </footer>
+    </main>
+
+    <script>
+        // ============================================================
+        // CONFIGURAÇÃO
+        // ============================================================
+        const SHEET_ID = "10dfN61x7duayFjI8i6FyVbKMLF_oIkmhz-FjGARmQck";
+        const SHEET_NAME = "Produtos";
+        const API_KEY = "AIzaSyDLIi7p9KpWhvZfPRbgtCfm-_eboLxqkik";
+        
+        let products = [];
+        let currentCategory = "all";
+        let currentSearchTerm = "";
+
+        const gridContainer = document.getElementById("productsGrid");
+        const searchInput = document.getElementById("searchInput");
+        const clearSearchBtn = document.getElementById("clearSearchBtn");
+        const noResultsDiv = document.getElementById("noResultsMsg");
+        const errorDiv = document.getElementById("errorMsg");
+        const dynamicCatsContainer = document.getElementById("dynamicCategoryButtons");
+        const loadingSpinner = document.getElementById("loadingSpinner");
+
+        function escapeHtml(str) {
+            if (!str) return "";
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        async function loadProductsFromSheet() {
+            loadingSpinner.style.display = "block";
+            errorDiv.classList.add("hidden");
+            
+            try {
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(SHEET_NAME)}?key=${API_KEY}`;
+                console.log("🔄 A carregar da URL:", url);
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    console.error("Erro da API:", data);
+                    throw new Error(data.error?.message || `Erro HTTP ${response.status}`);
+                }
+                
+                if (!data.values || data.values.length < 2) {
+                    throw new Error("A planilha 'Produtos' está vazia ou não tem dados.");
+                }
+                
+                products = parseSheetData(data.values);
+                console.log(`✅ ${products.length} produtos carregados!`);
+                console.log("📦 Primeiro produto:", products[0]);
+                
+                if (products.length === 0) {
+                    throw new Error("Nenhum produto válido encontrado.");
+                }
+                
+            } catch (error) {
+                console.error("❌ Erro:", error);
+                errorDiv.classList.remove("hidden");
+                errorDiv.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-triangle text-red-500 mr-2"></i><strong>Erro:</strong> ${error.message}</div>`;
+                products = [];
+            } finally {
+                loadingSpinner.style.display = "none";
+            }
+        }
+
+        function parseSheetData(rows) {
+            const headers = rows[0].map(h => String(h).toLowerCase().trim());
+            console.log("📋 Cabeçalhos encontrados:", headers);
+            
+            // Mapeamento específico para as colunas que indicaste
+            // Coluna C = preco (índice 2), Coluna D = promocao (índice 3)
+            // Mas vamos fazer busca pelos nomes das colunas para ser flexível
+            
+            const findCol = (keywords) => headers.findIndex(h => keywords.some(kw => h.includes(kw)));
+            
+            // Primeiro tenta encontrar pelos nomes das colunas
+            let titleIdx = findCol(["nome", "title", "produto"]);
+            let imgIdx = findCol(["imagem", "img", "foto"]);
+            let descIdx = findCol(["descrição", "desc", "descricao"]);
+            let linkIdx = findCol(["link", "url", "afiliado"]);
+            let catIdx = findCol(["categoria", "category"]);
+            let obsIdx = findCol(["obs", "desconto"]);
+            let precoIdx = findCol(["preco", "preço", "normal"]);
+            let promocaoIdx = findCol(["promocao", "promoção", "promocional"]);
+            
+            // Fallback por posição se não encontrar pelos nomes
+            if (titleIdx === -1) titleIdx = 0;
+            if (imgIdx === -1 && headers.length > 1) imgIdx = 1;
+            if (descIdx === -1 && headers.length > 2) descIdx = 2;
+            if (linkIdx === -1 && headers.length > 3) linkIdx = 3;
+            if (catIdx === -1 && headers.length > 4) catIdx = 4;
+            if (obsIdx === -1 && headers.length > 5) obsIdx = 5;
+            
+            // Para os preços, usar as posições específicas que indicaste:
+            // Coluna C = índice 2 (preço normal)
+            // Coluna D = índice 3 (preço promocional)
+            // Mas apenas se não foram encontrados pelos nomes
+            if (precoIdx === -1 && headers.length > 2) precoIdx = 2;
+            if (promocaoIdx === -1 && headers.length > 3) promocaoIdx = 3;
+            
+            console.log("🎯 Mapeamento final:");
+            console.log("  - Título:", titleIdx);
+            console.log("  - Imagem:", imgIdx);
+            console.log("  - Descrição:", descIdx);
+            console.log("  - Link:", linkIdx);
+            console.log("  - Categoria:", catIdx);
+            console.log("  - Preço Normal (coluna C):", precoIdx);
+            console.log("  - Preço Promoção (coluna D):", promocaoIdx);
+            console.log("  - Obs:", obsIdx);
+            
+            const productsArray = [];
+            
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                if (!row || row.length === 0) continue;
+                
+                const title = row[titleIdx] ? String(row[titleIdx]).trim() : "";
+                if (!title) continue;
+                
+                let img = "";
+                if (imgIdx !== -1 && row[imgIdx]) {
+                    const imgUrl = String(row[imgIdx]).trim();
+                    if (imgUrl.startsWith("http")) img = imgUrl;
+                }
+                
+                const precoNormal = precoIdx !== -1 && row[precoIdx] ? String(row[precoIdx]).trim() : "";
+                const precoPromocao = promocaoIdx !== -1 && row[promocaoIdx] ? String(row[promocaoIdx]).trim() : "";
+                
+                productsArray.push({
+                    title: title,
+                    img: img,
+                    desc: descIdx !== -1 ? (row[descIdx] || "") : "",
+                    link: linkIdx !== -1 ? (row[linkIdx] || "#") : "#",
+                    category: catIdx !== -1 ? (row[catIdx] || "Geral") : "Geral",
+                    obs: obsIdx !== -1 ? (row[obsIdx] || "") : "",
+                    preco: precoNormal,
+                    precoPromo: precoPromocao
+                });
+            }
+            
+            return productsArray;
+        }
+
+        function renderCategoryFilters() {
+            const categories = [...new Set(products.map(p => p.category).filter(c => c && c !== ""))].sort();
+            let buttonsHtml = "";
+            categories.forEach(cat => {
+                buttonsHtml += `<button data-category="${escapeHtml(cat)}" class="filter-btn rounded-full px-5 py-2 text-sm font-medium transition-all shadow-sm filter-inactive">${escapeHtml(cat)}</button>`;
+            });
+            dynamicCatsContainer.innerHTML = buttonsHtml;
+            
+            document.querySelectorAll(".filter-btn:not(#filterAll)").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const category = btn.getAttribute("data-category");
+                    if (category) {
+                        setActiveFilter(category);
+                        currentCategory = category;
+                        applyFiltersAndRender();
+                    }
+                });
+            });
+        }
+        
+        function setActiveFilter(activeCategory) {
+            document.querySelectorAll(".filter-btn").forEach(btn => {
+                const btnCat = btn.getAttribute("data-category");
+                if (btnCat === activeCategory) {
+                    btn.classList.remove("filter-inactive");
+                    btn.classList.add("filter-active");
+                } else {
+                    btn.classList.remove("filter-active");
+                    btn.classList.add("filter-inactive");
+                }
+            });
+        }
+        
+        function filterProducts() {
+            return products.filter(product => {
+                const matchesCategory = (currentCategory === "all") || (product.category === currentCategory);
+                const searchLower = currentSearchTerm.toLowerCase().trim();
+                let matchesSearch = true;
+                if (searchLower !== "") {
+                    matchesSearch = product.title.toLowerCase().includes(searchLower) || 
+                                    product.desc.toLowerCase().includes(searchLower);
+                }
+                return matchesCategory && matchesSearch;
+            });
+        }
+        
+        function renderProducts(productsToRender) {
+            if (!productsToRender.length) {
+                gridContainer.classList.add("hidden");
+                noResultsDiv.classList.remove("hidden");
+                return;
+            }
+            gridContainer.classList.remove("hidden");
+            noResultsDiv.classList.add("hidden");
+            
+            let cardsHtml = "";
+            for (let prod of productsToRender) {
+                let imgUrl = prod.img && prod.img.trim() !== "" ? prod.img : "https://placehold.co/400x300?text=Sem+Imagem";
+                if (!imgUrl.startsWith("http")) {
+                    imgUrl = "https://placehold.co/400x300?text=URL+Invalida";
+                }
+                
+                let discountHtml = "";
+                if (prod.obs && prod.obs.trim() !== "") {
+                    discountHtml = `<div class="discount-badge"><i class="fas fa-tag mr-1"></i> ${escapeHtml(prod.obs)}</div>`;
+                }
+                
+                // LÓGICA DE PREÇOS CORRIGIDA
+                let priceHtml = "";
+                const temPrecoPromo = prod.precoPromo && prod.precoPromo.trim() !== "";
+                const temPrecoNormal = prod.preco && prod.preco.trim() !== "";
+                
+                if (temPrecoPromo) {
+                    // Produto em promoção: mostra preço antigo riscado + preço promocional
+                    priceHtml = `
+                        <div class="price-section flex items-baseline flex-wrap gap-2">
+                            ${temPrecoNormal ? `<span class="old-price">${escapeHtml(prod.preco)}</span>` : ""}
+                            <span class="promo-price">${escapeHtml(prod.precoPromo)}</span>
+                        </div>
+                    `;
+                } else if (temPrecoNormal) {
+                    // Produto sem promoção: mostra apenas o preço normal
+                    priceHtml = `
+                        <div class="price-section">
+                            <span class="normal-price">${escapeHtml(prod.preco)}</span>
+                        </div>
+                    `;
+                }
+                
+                cardsHtml += `
+                    <div class="product-card bg-white/90 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg card-hover border border-gray-100/80 flex flex-col transition-all duration-200">
+                        <div class="relative overflow-hidden bg-gray-100 flex justify-center items-center p-4 h-56">
+                            ${discountHtml}
+                            <img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(prod.title)}" class="h-full w-auto max-h-48 object-contain transition duration-300" loading="lazy" 
+                                 onerror="this.onerror=null; this.src='https://placehold.co/400x300?text=Erro+Imagem'">
+                        </div>
+                        <div class="p-5 flex flex-col flex-1">
+                            <div class="mb-2">
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">${escapeHtml(prod.category)}</span>
+                            </div>
+                            <h3 class="font-bold text-gray-800 text-base line-clamp-2 min-h-[3rem]">${escapeHtml(prod.title)}</h3>
+                            <p class="text-gray-500 text-sm mt-2 desc-clamp leading-relaxed">${escapeHtml(prod.desc)}</p>
+                            ${priceHtml}
+                            <div class="mt-3 pt-1">
+                                <a href="${escapeHtml(prod.link)}" target="_blank" rel="nofollow sponsored noopener" 
+                                   class="btn-amazon w-full flex items-center justify-center gap-2 text-white font-semibold py-2.5 rounded-xl transition-all text-sm">
+                                    <i class="fab fa-amazon text-white text-base"></i> Ver Preço na Amazon
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            gridContainer.innerHTML = cardsHtml;
+        }
+        
+        function applyFiltersAndRender() {
+            const filtered = filterProducts();
+            renderProducts(filtered);
+            if (currentSearchTerm.length > 0) clearSearchBtn.classList.remove("hidden");
+            else clearSearchBtn.classList.add("hidden");
+        }
+        
+        let debounceTimer;
+        function onSearchInput(e) {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                currentSearchTerm = e.target.value;
+                applyFiltersAndRender();
+            }, 280);
+        }
+        
+        function clearSearch() {
+            searchInput.value = "";
+            currentSearchTerm = "";
+            applyFiltersAndRender();
+            searchInput.focus();
+        }
+        
+        async function init() {
+            gridContainer.classList.add("hidden");
+            noResultsDiv.classList.add("hidden");
+            
+            await loadProductsFromSheet();
+            
+            if (products.length > 0) {
+                renderCategoryFilters();
+                
+                const allButton = document.getElementById("filterAll");
+                if (allButton) {
+                    const newAllBtn = allButton.cloneNode(true);
+                    allButton.parentNode.replaceChild(newAllBtn, allButton);
+                    newAllBtn.addEventListener("click", () => {
+                        setActiveFilter("all");
+                        currentCategory = "all";
+                        applyFiltersAndRender();
+                    });
+                    setActiveFilter("all");
+                }
+                
+                searchInput.addEventListener("input", onSearchInput);
+                clearSearchBtn.addEventListener("click", clearSearch);
+                
+                currentCategory = "all";
+                currentSearchTerm = "";
+                applyFiltersAndRender();
+            }
+        }
+        
+        document.addEventListener("DOMContentLoaded", init);
+    </script>
+</body>
+</html>
