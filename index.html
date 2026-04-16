@@ -1,63 +1,269 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TechOfertas</title>
-
-<style>
-body { font-family: Arial; background:#f3f4f6; }
-.products-grid { display:grid; grid-template-columns:1fr; gap:10px; padding:10px; }
-.product-card { background:white; padding:10px; border-radius:10px; }
-img { max-width:100%; height:150px; object-fit:contain; }
-button { background:#FF9900; border:none; padding:10px; border-radius:20px; }
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <title>Amazon Afiliados · TechOfertas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(145deg, #f9fafc 0%, #f1f5f9 100%); overflow-x: hidden; }
+        .products-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; padding: 0 0.75rem; }
+        @media (min-width: 640px) { .products-grid { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; } }
+        @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } }
+        @media (min-width: 1280px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 1.75rem; max-width: 1400px; margin: 0 auto; } }
+        .product-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(4px); border-radius: 1rem; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: all 0.25s ease; display: flex; flex-direction: column; }
+        .product-card:active { transform: scale(0.98); }
+        @media (min-width: 768px) { .product-card:hover { transform: translateY(-4px); box-shadow: 0 20px 30px -12px rgba(0,0,0,0.15); } }
+        .image-container { position: relative; background: #f3f4f6; display: flex; justify-content: center; align-items: center; padding: 1rem; height: 200px; overflow: hidden; }
+        @media (min-width: 640px) { .image-container { height: 180px; } }
+        @media (min-width: 1024px) { .image-container { height: 200px; } }
+        .product-card img { height: 100%; width: auto; max-height: 160px; object-fit: contain; transition: transform 0.2s ease; }
+        .discount-badge { position: absolute; top: 8px; right: 8px; background: linear-gradient(135deg, #FF416C, #FF4B2B); color: white; font-weight: 800; font-size: 0.7rem; padding: 4px 10px; border-radius: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 10; white-space: nowrap; }
+        @media (min-width: 640px) { .discount-badge { top: 10px; right: 10px; font-size: 0.75rem; padding: 5px 12px; } }
+        .old-price { text-decoration: line-through; color: #9ca3af; font-size: 0.75rem; margin-right: 0.5rem; }
+        .promo-price { color: #ef4444; font-weight: 700; font-size: 1rem; }
+        .normal-price { font-weight: 600; color: #1f2937; font-size: 0.95rem; }
+        @media (min-width: 640px) { .old-price { font-size: 0.8rem; } .promo-price { font-size: 1.1rem; } .normal-price { font-size: 1rem; } }
+        .btn-amazon { background: linear-gradient(95deg, #FF9900, #FFAD33); transition: all 0.2s; font-weight: 600; font-size: 0.85rem; padding: 10px 12px; border-radius: 40px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
+        .btn-amazon:active { transform: scale(0.97); }
+        @media (min-width: 768px) { .btn-amazon:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 153, 0, 0.35); } }
+        .header-container { padding: 1rem 0.75rem; }
+        @media (min-width: 640px) { .header-container { padding: 1.5rem 1rem; } }
+        @media (min-width: 1024px) { .header-container { padding: 2rem 1.5rem; max-width: 1400px; margin: 0 auto; } }
+        .search-input { width: 100%; padding: 0.75rem 1rem 0.75rem 2.5rem; border-radius: 60px; border: 1px solid #e2e8f0; background: rgba(255, 255, 255, 0.9); font-size: 0.9rem; }
+        .filters-wrapper { overflow-x: auto; overflow-y: hidden; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: thin; padding: 0.5rem 0.75rem; }
+        .filters-container { display: inline-flex; gap: 0.5rem; }
+        @media (min-width: 640px) { .filters-wrapper { overflow-x: visible; white-space: normal; text-align: center; } .filters-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; } }
+        .filter-btn { padding: 0.5rem 1rem; border-radius: 40px; font-size: 0.8rem; font-weight: 500; transition: all 0.2s; white-space: nowrap; cursor: pointer; background: white; border: 1px solid #e2e8f0; }
+        @media (min-width: 640px) { .filter-btn { padding: 0.6rem 1.2rem; font-size: 0.85rem; } }
+        .filter-active { background: linear-gradient(105deg, #0f172a, #1e293b); color: white; border-color: transparent; }
+        .filter-inactive { background: white; color: #1e293b; border: 1px solid #e2e8f0; }
+        .filter-inactive:active { transform: scale(0.95); }
+        .category-badge { font-size: 0.65rem; padding: 3px 10px; border-radius: 30px; display: inline-block; background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+        @media (min-width: 640px) { .category-badge { font-size: 0.7rem; padding: 4px 12px; } }
+        .product-title { font-size: 0.9rem; font-weight: 700; line-height: 1.3; min-height: 2.6rem; color: #1f2937; }
+        @media (min-width: 640px) { .product-title { font-size: 1rem; min-height: 2.8rem; } }
+        .price-section { margin-top: 0.5rem; margin-bottom: 0.25rem; }
+        .loading-spinner { border: 3px solid #f3f3f3; border-top: 3px solid #FF9900; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 2rem auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .error-message { background: #fee2e2; border-left: 4px solid #ef4444; padding: 1rem; margin: 1rem; border-radius: 0.75rem; font-size: 0.8rem; }
+        .footer-text { font-size: 0.7rem; text-align: center; padding: 1.5rem 0; border-top: 1px solid #e2e8f0; margin-top: 1.5rem; color: #6b7280; }
+    </style>
 </head>
 <body>
 
-<h2 style="text-align:center;">TechOfertas</h2>
+<main>
+    <div class="header-container">
+        <div class="text-center">
+            <h1 class="bg-gradient-to-r from-[#0f2b3d] to-[#1e4a6e] bg-clip-text text-transparent text-3xl md:text-4xl font-extrabold">
+                Tech<span class="text-[#FF9900]">Ofertas</span>
+            </h1>
+            <p class="text-gray-500 text-sm md:text-base mt-1">Os melhores produtos da Amazon · Preços direto da planilha</p>
+        </div>
+        <div class="mt-4 relative">
+            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+            <input type="text" id="searchInput" placeholder="Buscar produtos..." class="search-input pl-9 pr-10">
+            <button id="clearSearchBtn" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 hidden">
+                <i class="fas fa-times-circle text-sm"></i>
+            </button>
+        </div>
+    </div>
 
-<div id="products"></div>
+    <div class="filters-wrapper">
+        <div class="filters-container">
+            <button data-category="all" class="filter-btn filter-active" id="filterAll">Todos</button>
+            <div id="dynamicCategoryButtons" class="inline-flex gap-2"></div>
+        </div>
+    </div>
+
+    <div id="loadingSpinner" class="loading-spinner"></div>
+    <div id="productsGrid" class="products-grid hidden"></div>
+    <div id="noResultsMsg" class="text-center py-12 hidden">
+        <i class="fas fa-box-open text-4xl text-gray-300 mb-2"></i>
+        <p class="text-gray-500">Nenhum produto encontrado 😕</p>
+        <p class="text-gray-400 text-xs mt-1">Tente outra busca ou categoria</p>
+    </div>
+    <div id="errorMsg" class="hidden"></div>
+
+    <div class="footer-text">
+        ✨ Como Associado da Amazon, ganho com compras qualificadas.<br>
+        © 2025 TechOfertas · Links de afiliado direcionam à Amazon
+    </div>
+</main>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzXV2COi6q6327Son0xN9pXKK3vWkmMc0FRp6m25MXzJsBbqg80GAR_qvNhP9pFW9JzWA/exec";
+    // ============================================================
+    // COLOQUE AQUI A URL DO SEU WEB APP (depois de publicar)
+    // ============================================================
+    const WEB_APP_URL = "https://script.google.com/macros/s/SEU_ID_AQUI/exec";
+    
+    let products = [];
+    let currentCategory = "all";
+    let currentSearchTerm = "";
 
-async function loadProducts() {
-    try {
-        const res = await fetch(API_URL);
-        const data = await res.json();
+    const gridContainer = document.getElementById("productsGrid");
+    const searchInput = document.getElementById("searchInput");
+    const clearSearchBtn = document.getElementById("clearSearchBtn");
+    const noResultsDiv = document.getElementById("noResultsMsg");
+    const errorDiv = document.getElementById("errorMsg");
+    const dynamicCatsContainer = document.getElementById("dynamicCategoryButtons");
+    const loadingSpinner = document.getElementById("loadingSpinner");
 
-        renderProducts(data);
-
-    } catch (e) {
-        document.body.innerHTML += "<p>Erro ao carregar produtos</p>";
+    function escapeHtml(str) {
+        if (!str) return "";
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
     }
-}
 
-function renderProducts(products) {
-    const container = document.getElementById("products");
+    async function loadProducts() {
+        loadingSpinner.style.display = "block";
+        errorDiv.classList.add("hidden");
+        try {
+            const response = await fetch(WEB_APP_URL);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            if (data.error) throw new Error(data.error);
+            if (!Array.isArray(data)) throw new Error("Resposta inválida");
+            products = data;
+            console.log(`✅ ${products.length} produtos carregados via Web App`);
+            if (products.length === 0) throw new Error("Nenhum produto encontrado");
+        } catch (err) {
+            console.error("❌ Erro:", err);
+            errorDiv.classList.remove("hidden");
+            errorDiv.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-triangle text-red-500 mr-2"></i> ${err.message}<br><small>Verifica se a URL do Web App está correta e publicada como "Qualquer pessoa"</small></div>`;
+            products = [];
+        } finally {
+            loadingSpinner.style.display = "none";
+        }
+    }
 
-    container.innerHTML = products.map(p => `
-        <div class="product-card">
-            <img src="${p.img}">
-            <h3>${p.title}</h3>
+    function renderCategoryFilters() {
+        const categories = [...new Set(products.map(p => p.category).filter(c => c && c !== ""))].sort();
+        dynamicCatsContainer.innerHTML = categories.map(cat => `
+            <button data-category="${escapeHtml(cat)}" class="filter-btn filter-inactive">${escapeHtml(cat)}</button>
+        `).join("");
+        document.querySelectorAll(".filter-btn:not(#filterAll)").forEach(btn => {
+            btn.addEventListener("click", () => {
+                currentCategory = btn.getAttribute("data-category");
+                setActiveFilter(currentCategory);
+                applyFiltersAndRender();
+            });
+        });
+    }
 
-            ${
-                p.precoPromo 
-                ? `<p><s>${p.preco}</s> <b>${p.precoPromo}</b></p>`
-                : `<p>${p.preco}</p>`
+    function setActiveFilter(cat) {
+        document.querySelectorAll(".filter-btn").forEach(btn => {
+            const btnCat = btn.getAttribute("data-category");
+            if (btnCat === cat) {
+                btn.classList.add("filter-active");
+                btn.classList.remove("filter-inactive");
+            } else {
+                btn.classList.add("filter-inactive");
+                btn.classList.remove("filter-active");
+            }
+        });
+    }
+
+    function filterProducts() {
+        return products.filter(p => {
+            if (currentCategory !== "all" && p.category !== currentCategory) return false;
+            if (currentSearchTerm.trim()) {
+                const term = currentSearchTerm.toLowerCase();
+                return p.title.toLowerCase().includes(term);
+            }
+            return true;
+        });
+    }
+
+    function renderProducts(prods) {
+        if (!prods.length) {
+            gridContainer.classList.add("hidden");
+            noResultsDiv.classList.remove("hidden");
+            return;
+        }
+        gridContainer.classList.remove("hidden");
+        noResultsDiv.classList.add("hidden");
+
+        let html = "";
+        for (let p of prods) {
+            let imgUrl = (p.img && p.img.startsWith("http")) ? p.img : "https://placehold.co/400x300?text=Sem+Imagem";
+            // Badge de desconto (ignora "Não" e vazio)
+            let discountHtml = "";
+            if (p.obs && p.obs.trim() !== "" && p.obs.toLowerCase() !== "não") {
+                discountHtml = `<div class="discount-badge"><i class="fas fa-tag mr-1"></i> ${escapeHtml(p.obs)}</div>`;
             }
 
-            <a href="${p.link}" target="_blank">
-                <button>Ver na Amazon</button>
-            </a>
-        </div>
-    `).join("");
-}
+            // Preços
+            let priceHtml = "";
+            const temPromo = p.precoPromo && p.precoPromo.trim() !== "";
+            const temNormal = p.preco && p.preco.trim() !== "";
+            if (temPromo && temNormal && p.preco !== p.precoPromo) {
+                priceHtml = `<div class="price-section flex items-baseline flex-wrap">
+                                <span class="old-price">${escapeHtml(p.preco)}</span>
+                                <span class="promo-price">${escapeHtml(p.precoPromo)}</span>
+                            </div>`;
+            } else if (temNormal) {
+                priceHtml = `<div class="price-section"><span class="normal-price">${escapeHtml(p.preco)}</span></div>`;
+            }
 
-loadProducts();
+            html += `
+                <div class="product-card">
+                    <div class="image-container">
+                        ${discountHtml}
+                        <img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(p.title)}" loading="lazy" 
+                             onerror="this.src='https://placehold.co/400x300?text=Erro+Imagem'">
+                    </div>
+                    <div class="p-3 flex flex-col flex-1">
+                        <span class="category-badge self-start">${escapeHtml(p.category)}</span>
+                        <h3 class="product-title mt-2">${escapeHtml(p.title)}</h3>
+                        ${priceHtml}
+                        <a href="${escapeHtml(p.link)}" target="_blank" rel="nofollow sponsored noopener" class="btn-amazon text-white mt-3">
+                            <i class="fab fa-amazon"></i> Ver Preço na Amazon
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+        gridContainer.innerHTML = html;
+    }
+
+    function applyFiltersAndRender() {
+        renderProducts(filterProducts());
+        clearSearchBtn.classList.toggle("hidden", !currentSearchTerm.length);
+    }
+
+    searchInput.addEventListener("input", (e) => {
+        clearTimeout(window.searchTimeout);
+        window.searchTimeout = setTimeout(() => {
+            currentSearchTerm = e.target.value;
+            applyFiltersAndRender();
+        }, 300);
+    });
+
+    clearSearchBtn.addEventListener("click", () => {
+        searchInput.value = "";
+        currentSearchTerm = "";
+        applyFiltersAndRender();
+        searchInput.focus();
+    });
+
+    async function init() {
+        await loadProducts();
+        if (products.length) {
+            renderCategoryFilters();
+            setActiveFilter("all");
+            applyFiltersAndRender();
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
 </script>
-
 </body>
 </html>
