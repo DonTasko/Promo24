@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PromoHunter – Melhores Ofertas Amazon</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --amazon: #FF9900;
@@ -44,20 +44,65 @@
 
   .banner { background: linear-gradient(90deg,#1a0e00,#2b1800,#1a0e00); border-bottom: 1px solid #3a2200; padding: 9px 20px; text-align: center; font-size: 12px; color: var(--amazon); letter-spacing: 1px; font-weight: 700; text-transform: uppercase; }
 
-  .filters { padding: 16px 20px 0; max-width: 1100px; margin: 0 auto; display: flex; gap: 8px; flex-wrap: wrap; }
-  .filter-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+  /* ── FILTROS POR DESCONTO ── */
+  .filters-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 14px 20px 0;
+  }
+  .filters-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
   .filter-btn:hover { border-color: var(--amazon); color: var(--amazon); }
   .filter-btn.active { background: var(--amazon); border-color: var(--amazon); color: #000; font-weight: 700; }
+  .filter-btn .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 
-  main { max-width: 1100px; margin: 0 auto; padding: 20px 16px 60px; }
+  main { max-width: 1100px; margin: 0 auto; padding: 16px 16px 60px; }
+
+  .results-info {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    min-height: 18px;
+  }
+  .results-info strong { color: var(--amazon); }
 
   .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
 
   .product { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; position: relative; animation: fadeIn 0.3s ease forwards; opacity: 0; }
   @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
   .product:hover { transform: translateY(-3px); border-color: var(--amazon); box-shadow: 0 6px 24px rgba(255,153,0,0.12); }
-  .badge { position: absolute; top: 8px; left: 8px; background: var(--red); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 7px; border-radius: 20px; z-index: 2; }
-  .badge.high { background: var(--green); }
+
+  .badge { position: absolute; top: 8px; left: 8px; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 20px; z-index: 2; }
+  .badge.tier-low    { background: #1565c0; }  /* 5–24%   azul   */
+  .badge.tier-mid    { background: #e65100; }  /* 25–49%  laranja */
+  .badge.tier-high   { background: #2e7d32; }  /* 50–74%  verde  */
+  .badge.tier-fire   { background: #b71c1c; }  /* 75%+    vermelho */
+
   .img-wrap { background: #fff; width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 10px; }
   .img-wrap img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.3s; }
   .product:hover .img-wrap img { transform: scale(1.05); }
@@ -69,7 +114,7 @@
   .btn-buy { display: block; padding: 9px; background: var(--amazon); color: #000; border-radius: 7px; font-weight: 700; font-size: 12px; text-align: center; text-decoration: none; transition: background 0.2s; }
   .btn-buy:hover { background: var(--amazon-dark); }
 
-  .state-msg { grid-column: 1/-1; text-align: center; padding: 80px 20px; color: var(--muted); }
+  .state-msg { grid-column: 1/-1; text-align: center; padding: 80px 20px; color: var(--muted); line-height: 2; }
   .loader { display: flex; flex-direction: column; align-items: center; gap: 14px; }
   .spinner { width: 34px; height: 34px; border: 3px solid var(--border); border-top-color: var(--amazon); border-radius: 50%; animation: spin 0.7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -102,9 +147,29 @@
 
 <div class="banner">⚡ Promoções atualizadas diariamente — Aproveita antes que acabem!</div>
 
-<div class="filters" id="filters" style="display:none"></div>
+<div class="filters-wrap">
+  <div class="filters-label">Filtrar por desconto</div>
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-min="0"  data-max="999" onclick="filterBy(0,999,this)">
+      <span class="dot" style="background:#FF9900"></span> Todas
+    </button>
+    <button class="filter-btn" data-min="5"  data-max="24"  onclick="filterBy(5,24,this)">
+      <span class="dot" style="background:#1565c0"></span> 5% – 24%
+    </button>
+    <button class="filter-btn" data-min="25" data-max="49"  onclick="filterBy(25,49,this)">
+      <span class="dot" style="background:#e65100"></span> 25% – 49%
+    </button>
+    <button class="filter-btn" data-min="50" data-max="74"  onclick="filterBy(50,74,this)">
+      <span class="dot" style="background:#2e7d32"></span> 50% – 74%
+    </button>
+    <button class="filter-btn" data-min="75" data-max="999" onclick="filterBy(75,999,this)">
+      <span class="dot" style="background:#b71c1c"></span> 75%+ 🔥
+    </button>
+  </div>
+</div>
 
 <main>
+  <div class="results-info" id="results-info"></div>
   <div class="products" id="products-container">
     <div class="state-msg">
       <div class="loader"><div class="spinner"></div><span>A carregar promoções...</span></div>
@@ -119,13 +184,12 @@
 </footer>
 
 <script>
-  // ── CONFIG ─────────────────────────────────────────────
-  const SHEET_ID  = "AKfycbzXV2COi6q6327Son0xN9pXKK3vWkmMc0FRp6m25MXzJsBbqg80GAR_qvNhP9pFW9JzWA";
-  const TOKEN     = "pth_K7x2mZ9qRvL4nW";
-  // ───────────────────────────────────────────────────────
+  const SHEET_ID = "AKfycbzXV2COi6q6327Son0xN9pXKK3vWkmMc0FRp6m25MXzJsBbqg80GAR_qvNhP9pFW9JzWA";
+  const TOKEN    = "pth_K7x2mZ9qRvL4nW";
 
-  let allProducts  = [];
-  let activeCategory = "all";
+  let allProducts   = [];
+  let activeMin     = 0;
+  let activeMax     = 999;
 
   function loadProducts() {
     const container = document.getElementById("products-container");
@@ -134,12 +198,10 @@
     btn.classList.add("loading");
     btn.textContent = "⏳ A carregar...";
     container.innerHTML = `<div class="state-msg"><div class="loader"><div class="spinner"></div><span>A carregar promoções...</span></div></div>`;
+    document.getElementById("results-info").textContent = "";
 
-    // Usa XMLHttpRequest — mais compatível com WebViews Android
     const xhr = new XMLHttpRequest();
-    const url = `https://script.google.com/macros/s/${SHEET_ID}/exec?token=${TOKEN}&t=${Date.now()}`;
-
-    xhr.open("GET", url, true);
+    xhr.open("GET", `https://script.google.com/macros/s/${SHEET_ID}/exec?token=${TOKEN}&t=${Date.now()}`, true);
     xhr.timeout = 15000;
 
     xhr.onload = function() {
@@ -174,10 +236,11 @@
                 category: item.categoria || "Geral",
               };
             })
-            .sort((a, b) => b.discount - a.discount);
+            .filter(p => p.discount >= 5)        // mínimo 5% de desconto
+            .sort((a, b) => b.discount - a.discount); // maiores descontos primeiro
 
-          buildFilters();
-          renderProducts(allProducts);
+          updateCount();
+          renderProducts(getFiltered());
 
         } catch(e) {
           showError(container);
@@ -189,8 +252,67 @@
 
     xhr.onerror   = function() { btn.classList.remove("loading"); btn.innerHTML = "🔄 Atualizar"; showError(container); };
     xhr.ontimeout = function() { btn.classList.remove("loading"); btn.innerHTML = "🔄 Atualizar"; showError(container); };
-
     xhr.send();
+  }
+
+  function getFiltered() {
+    return allProducts.filter(p => p.discount >= activeMin && p.discount <= activeMax);
+  }
+
+  function filterBy(min, max, btn) {
+    activeMin = min;
+    activeMax = max;
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    renderProducts(getFiltered());
+  }
+
+  function updateCount() {
+    document.getElementById("count").textContent = allProducts.length;
+    document.getElementById("count-badge").classList.add("visible");
+  }
+
+  function renderProducts(items) {
+    const container = document.getElementById("products-container");
+    const info      = document.getElementById("results-info");
+
+    container.innerHTML = "";
+
+    if (items.length === 0) {
+      info.innerHTML = "";
+      container.innerHTML = `<div class="state-msg">😕 Sem produtos neste intervalo de desconto.</div>`;
+      return;
+    }
+
+    info.innerHTML = `A mostrar <strong>${items.length}</strong> oferta${items.length !== 1 ? "s" : ""} · ordenadas por maior desconto`;
+
+    items.forEach((item, i) => {
+      const tierClass = item.discount >= 75 ? "tier-fire"
+                      : item.discount >= 50 ? "tier-high"
+                      : item.discount >= 25 ? "tier-mid"
+                      : "tier-low";
+
+      container.insertAdjacentHTML("beforeend", `
+        <div class="product" style="animation-delay:${Math.min(i*25,500)}ms">
+          ${item.discount ? `<span class="badge ${tierClass}">-${item.discount}%</span>` : ""}
+          <div class="img-wrap">
+            <img src="${item.image}" alt="${esc(item.title)}" loading="lazy"
+              onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2280%22%3E%F0%9F%93%A6%3C/text%3E%3C/svg%3E'">
+          </div>
+          <div class="card-body">
+            <div class="title">${esc(item.title)}</div>
+            <div class="prices">
+              ${item.original && item.original !== item.promo
+                ? `<span class="price-original">${item.original.toFixed(2)} €</span>`
+                : ""}
+              ${item.promo
+                ? `<span class="price-promo">${item.promo.toFixed(2)} €</span>`
+                : ""}
+            </div>
+            <a class="btn-buy" href="${item.link}" target="_blank" rel="noopener sponsored">🛒 Ver Oferta</a>
+          </div>
+        </div>`);
+    });
   }
 
   function showError(container) {
@@ -199,58 +321,6 @@
         ⚠️ Erro ao carregar produtos.<br>
         <button class="refresh-btn" style="margin-top:14px;display:inline-flex" onclick="loadProducts()">🔄 Tentar novamente</button>
       </div>`;
-  }
-
-  function renderProducts(items) {
-    const container = document.getElementById("products-container");
-    const badge     = document.getElementById("count-badge");
-
-    container.innerHTML = "";
-
-    if (items.length === 0) {
-      container.innerHTML = `<div class="state-msg">😕 Sem produtos nesta categoria.</div>`;
-      badge.classList.remove("visible");
-      return;
-    }
-
-    document.getElementById("count").textContent = items.length;
-    badge.classList.add("visible");
-
-    items.forEach((item, i) => {
-      container.insertAdjacentHTML("beforeend", `
-        <div class="product" style="animation-delay:${Math.min(i*30,400)}ms">
-          ${item.discount ? `<span class="badge ${item.discount >= 50 ? 'high' : ''}">-${item.discount}%</span>` : ""}
-          <div class="img-wrap">
-            <img src="${item.image}" alt="${esc(item.title)}" loading="lazy"
-              onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2280%22%3E%F0%9F%93%A6%3C/text%3E%3C/svg%3E'">
-          </div>
-          <div class="card-body">
-            <div class="title">${esc(item.title)}</div>
-            <div class="prices">
-              ${item.original && item.original !== item.promo ? `<span class="price-original">${item.original.toFixed(2)} €</span>` : ""}
-              ${item.promo ? `<span class="price-promo">${item.promo.toFixed(2)} €</span>` : ""}
-            </div>
-            <a class="btn-buy" href="${item.link}" target="_blank" rel="noopener sponsored">🛒 Ver Oferta</a>
-          </div>
-        </div>`);
-    });
-  }
-
-  function buildFilters() {
-    const cats = ["all", ...new Set(allProducts.map(p => p.category).filter(Boolean))];
-    const el   = document.getElementById("filters");
-    el.style.display = "flex";
-    el.innerHTML = cats.map(cat => `
-      <button class="filter-btn ${cat === activeCategory ? 'active' : ''}"
-        onclick="filterBy('${esc(cat)}', this)">${cat === "all" ? "Todas" : esc(cat)}</button>
-    `).join("");
-  }
-
-  function filterBy(cat, btn) {
-    activeCategory = cat;
-    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    renderProducts(cat === "all" ? allProducts : allProducts.filter(p => p.category === cat));
   }
 
   function parsePrice(v) {
