@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PromoHunter – Melhores Ofertas Online</title>
+<title>PromoHunter – Melhores Ofertas Amazon</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -19,312 +19,68 @@
     --muted: #777;
     --radius: 12px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
-
-  /* ── HEADER ── */
   header {
     background: #111;
     border-bottom: 2px solid var(--amazon);
     padding: 14px 20px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
   }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-  }
-
-  .logo-icon {
-    width: 38px;
-    height: 38px;
-    background: var(--amazon);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    flex-shrink: 0;
-  }
-
-  .logo-text {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 24px;
-    letter-spacing: 2px;
-    color: var(--amazon);
-    line-height: 1;
-  }
-
-  .logo-sub {
-    font-size: 10px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-top: 2px;
-  }
-
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .count-badge {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    display: none;
-  }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo-icon { width: 38px; height: 38px; background: var(--amazon); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .logo-text { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 2px; color: var(--amazon); line-height: 1; }
+  .logo-sub { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 2px; }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .count-badge { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); padding: 6px 12px; border-radius: 20px; font-size: 12px; display: none; }
   .count-badge.visible { display: block; }
   .count-badge span { color: var(--amazon); font-weight: 700; }
-
-  .refresh-btn {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 8px 14px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
+  .refresh-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 8px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; white-space: nowrap; }
   .refresh-btn:hover { background: var(--border); border-color: var(--amazon); }
   .refresh-btn:active { transform: scale(0.97); }
   .refresh-btn.loading { opacity: 0.6; pointer-events: none; }
 
-  /* ── BANNER ── */
-  .banner {
-    background: linear-gradient(90deg, #1a0e00, #2b1800, #1a0e00);
-    border-bottom: 1px solid #3a2200;
-    padding: 9px 20px;
-    text-align: center;
-    font-size: 12px;
-    color: var(--amazon);
-    letter-spacing: 1px;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
+  .banner { background: linear-gradient(90deg,#1a0e00,#2b1800,#1a0e00); border-bottom: 1px solid #3a2200; padding: 9px 20px; text-align: center; font-size: 12px; color: var(--amazon); letter-spacing: 1px; font-weight: 700; text-transform: uppercase; }
 
-  /* ── FILTROS ── */
-  .filters {
-    padding: 16px 20px 0;
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .filter-btn {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
+  .filters { padding: 16px 20px 0; max-width: 1100px; margin: 0 auto; display: flex; gap: 8px; flex-wrap: wrap; }
+  .filter-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
   .filter-btn:hover { border-color: var(--amazon); color: var(--amazon); }
-  .filter-btn.active {
-    background: var(--amazon);
-    border-color: var(--amazon);
-    color: #000;
-    font-weight: 700;
-  }
+  .filter-btn.active { background: var(--amazon); border-color: var(--amazon); color: #000; font-weight: 700; }
 
-  /* ── MAIN ── */
-  main {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 20px 16px 60px;
-  }
+  main { max-width: 1100px; margin: 0 auto; padding: 20px 16px 60px; }
 
-  /* ── GRID ── */
-  .products {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-    gap: 14px;
-  }
+  .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
 
-  /* ── CARD ── */
-  .product {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-    position: relative;
-    animation: fadeIn 0.3s ease forwards;
-    opacity: 0;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .product:hover {
-    transform: translateY(-3px);
-    border-color: var(--amazon);
-    box-shadow: 0 6px 24px rgba(255,153,0,0.12);
-  }
-
-  .badge {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    background: var(--red);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 3px 7px;
-    border-radius: 20px;
-    z-index: 2;
-    letter-spacing: 0.3px;
-  }
-
+  .product { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; position: relative; animation: fadeIn 0.3s ease forwards; opacity: 0; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  .product:hover { transform: translateY(-3px); border-color: var(--amazon); box-shadow: 0 6px 24px rgba(255,153,0,0.12); }
+  .badge { position: absolute; top: 8px; left: 8px; background: var(--red); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 7px; border-radius: 20px; z-index: 2; }
   .badge.high { background: var(--green); }
-
-  .img-wrap {
-    background: #fff;
-    width: 100%;
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    padding: 10px;
-  }
-  .img-wrap img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    transition: transform 0.3s;
-  }
+  .img-wrap { background: #fff; width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 10px; }
+  .img-wrap img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.3s; }
   .product:hover .img-wrap img { transform: scale(1.05); }
-
-  .card-body {
-    padding: 11px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    flex: 1;
-  }
-
-  .title {
-    font-size: 12px;
-    color: var(--text);
-    line-height: 1.45;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    flex: 1;
-  }
-
-  .prices {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .price-original {
-    text-decoration: line-through;
-    color: var(--muted);
-    font-size: 12px;
-  }
-  .price-promo {
-    color: var(--amazon);
-    font-weight: 700;
-    font-size: 19px;
-    line-height: 1;
-  }
-
-  .btn-buy {
-    display: block;
-    padding: 9px;
-    background: var(--amazon);
-    color: #000;
-    border-radius: 7px;
-    font-weight: 700;
-    font-size: 12px;
-    text-align: center;
-    text-decoration: none;
-    letter-spacing: 0.3px;
-    transition: background 0.2s, transform 0.1s;
-  }
+  .card-body { padding: 11px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .title { font-size: 12px; color: var(--text); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; flex: 1; }
+  .prices { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+  .price-original { text-decoration: line-through; color: var(--muted); font-size: 12px; }
+  .price-promo { color: var(--amazon); font-weight: 700; font-size: 19px; line-height: 1; }
+  .btn-buy { display: block; padding: 9px; background: var(--amazon); color: #000; border-radius: 7px; font-weight: 700; font-size: 12px; text-align: center; text-decoration: none; transition: background 0.2s; }
   .btn-buy:hover { background: var(--amazon-dark); }
-  .btn-buy:active { transform: scale(0.98); }
 
-  /* ── ESTADOS ── */
-  .state-msg {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 80px 20px;
-    color: var(--muted);
-  }
-
-  .loader {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-  }
-  .spinner {
-    width: 34px;
-    height: 34px;
-    border: 3px solid var(--border);
-    border-top-color: var(--amazon);
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-  }
+  .state-msg { grid-column: 1/-1; text-align: center; padding: 80px 20px; color: var(--muted); }
+  .loader { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .spinner { width: 34px; height: 34px; border: 3px solid var(--border); border-top-color: var(--amazon); border-radius: 50%; animation: spin 0.7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ── FOOTER ── */
-  footer {
-    text-align: center;
-    padding: 28px 20px;
-    color: var(--muted);
-    font-size: 11px;
-    border-top: 1px solid var(--border);
-    line-height: 2;
-  }
+  footer { text-align: center; padding: 28px 20px; color: var(--muted); font-size: 11px; border-top: 1px solid var(--border); line-height: 2; }
   footer a { color: var(--amazon); text-decoration: none; }
 
-  /* ── MOBILE ── */
   @media (max-width: 500px) {
     .products { grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .logo-text { font-size: 20px; }
     .logo-sub { display: none; }
-    .banner { font-size: 10px; }
   }
 </style>
 </head>
@@ -340,27 +96,18 @@
   </a>
   <div class="header-right">
     <div class="count-badge" id="count-badge"><span id="count">0</span> ofertas</div>
-    <button class="refresh-btn" id="refresh-btn" onclick="loadProducts()">
-      🔄 Atualizar
-    </button>
+    <button class="refresh-btn" id="refresh-btn" onclick="loadProducts()">🔄 Atualizar</button>
   </div>
 </header>
 
-<div class="banner">
-  ⚡ Promoções atualizadas diariamente — Aproveita antes que acabem!
-</div>
+<div class="banner">⚡ Promoções atualizadas diariamente — Aproveita antes que acabem!</div>
 
-<div class="filters" id="filters" style="display:none">
-  <button class="filter-btn active" data-cat="all" onclick="filterBy('all', this)">Todas</button>
-</div>
+<div class="filters" id="filters" style="display:none"></div>
 
 <main>
   <div class="products" id="products-container">
     <div class="state-msg">
-      <div class="loader">
-        <div class="spinner"></div>
-        <span>A carregar promoções...</span>
-      </div>
+      <div class="loader"><div class="spinner"></div><span>A carregar promoções...</span></div>
     </div>
   </div>
 </main>
@@ -372,84 +119,91 @@
 </footer>
 
 <script>
-  // ── CONFIG ──────────────────────────────────────────────
-  const SHEET_URL = "https://script.google.com/macros/s/AKfycbzXV2COi6q6327Son0xN9pXKK3vWkmMc0FRp6m25MXzJsBbqg80GAR_qvNhP9pFW9JzWA/exec";
-  const TOKEN     = "pth_K7x2mZ9qRvL4nW";   // token secreto — igual no Apps Script
-  // ────────────────────────────────────────────────────────
+  // ── CONFIG ─────────────────────────────────────────────
+  const SHEET_ID  = "AKfycbzXV2COi6q6327Son0xN9pXKK3vWkmMc0FRp6m25MXzJsBbqg80GAR_qvNhP9pFW9JzWA";
+  const TOKEN     = "pth_K7x2mZ9qRvL4nW";
+  // ───────────────────────────────────────────────────────
 
-  let allProducts = [];
+  let allProducts  = [];
   let activeCategory = "all";
 
-  async function loadProducts() {
+  function loadProducts() {
     const container = document.getElementById("products-container");
-    const btn = document.getElementById("refresh-btn");
+    const btn       = document.getElementById("refresh-btn");
 
     btn.classList.add("loading");
     btn.textContent = "⏳ A carregar...";
-    container.innerHTML = `
-      <div class="state-msg">
-        <div class="loader">
-          <div class="spinner"></div>
-          <span>A carregar promoções...</span>
-        </div>
-      </div>`;
+    container.innerHTML = `<div class="state-msg"><div class="loader"><div class="spinner"></div><span>A carregar promoções...</span></div></div>`;
 
-    try {
-      const res = await fetch(`${SHEET_URL}?token=${TOKEN}`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    // Usa XMLHttpRequest — mais compatível com WebViews Android
+    const xhr = new XMLHttpRequest();
+    const url = `https://script.google.com/macros/s/${SHEET_ID}/exec?token=${TOKEN}&t=${Date.now()}`;
 
-      const raw = await res.json();
+    xhr.open("GET", url, true);
+    xhr.timeout = 15000;
 
-      if (!Array.isArray(raw) || raw.length === 0) {
-        container.innerHTML = `<div class="state-msg">😕 Sem promoções disponíveis neste momento.</div>`;
-        return;
-      }
-
-      // Normaliza campos (Apps Script devolve em português)
-      allProducts = raw
-        .filter(item => item.titulo && item.titulo.trim() !== "")
-        .map(item => {
-          const original = parsePrice(item.preco);
-          const promo    = parsePrice(item.promocao);
-          let discount   = 0;
-          if (original && promo && promo < original) {
-            discount = Math.round(((original - promo) / original) * 100);
-          }
-          return {
-            title:    item.titulo    || "Sem título",
-            image:    item.imagem    || "",
-            original: original,
-            promo:    promo || original,
-            discount: discount,
-            link:     item.link      || "#",
-            category: item.categoria || "Geral",
-            obs:      item.obs       || "",
-          };
-        })
-        .sort((a, b) => b.discount - a.discount); // maiores descontos primeiro
-
-      buildFilters();
-      renderProducts(allProducts);
-
-    } catch (err) {
-      console.error("Erro:", err);
-      container.innerHTML = `
-        <div class="state-msg">
-          ⚠️ Erro ao carregar produtos.<br>
-          <button class="refresh-btn" style="margin-top:14px;display:inline-flex" onclick="loadProducts()">
-            🔄 Tentar novamente
-          </button>
-        </div>`;
-    } finally {
+    xhr.onload = function() {
       btn.classList.remove("loading");
       btn.innerHTML = "🔄 Atualizar";
-    }
+
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          const raw = JSON.parse(xhr.responseText);
+
+          if (!Array.isArray(raw) || raw.length === 0) {
+            container.innerHTML = `<div class="state-msg">😕 Sem promoções disponíveis neste momento.</div>`;
+            return;
+          }
+
+          allProducts = raw
+            .filter(item => item.titulo && item.titulo.trim() !== "")
+            .map(item => {
+              const original = parsePrice(item.preco);
+              const promo    = parsePrice(item.promocao);
+              let discount   = 0;
+              if (original && promo && promo < original) {
+                discount = Math.round(((original - promo) / original) * 100);
+              }
+              return {
+                title:    item.titulo    || "Sem título",
+                image:    item.imagem    || "",
+                original: original,
+                promo:    promo || original,
+                discount: discount,
+                link:     item.link      || "#",
+                category: item.categoria || "Geral",
+              };
+            })
+            .sort((a, b) => b.discount - a.discount);
+
+          buildFilters();
+          renderProducts(allProducts);
+
+        } catch(e) {
+          showError(container);
+        }
+      } else {
+        showError(container);
+      }
+    };
+
+    xhr.onerror   = function() { btn.classList.remove("loading"); btn.innerHTML = "🔄 Atualizar"; showError(container); };
+    xhr.ontimeout = function() { btn.classList.remove("loading"); btn.innerHTML = "🔄 Atualizar"; showError(container); };
+
+    xhr.send();
+  }
+
+  function showError(container) {
+    container.innerHTML = `
+      <div class="state-msg">
+        ⚠️ Erro ao carregar produtos.<br>
+        <button class="refresh-btn" style="margin-top:14px;display:inline-flex" onclick="loadProducts()">🔄 Tentar novamente</button>
+      </div>`;
   }
 
   function renderProducts(items) {
     const container = document.getElementById("products-container");
     const badge     = document.getElementById("count-badge");
-    const count     = document.getElementById("count");
 
     container.innerHTML = "";
 
@@ -459,35 +213,24 @@
       return;
     }
 
-    count.textContent = items.length;
+    document.getElementById("count").textContent = items.length;
     badge.classList.add("visible");
 
     items.forEach((item, i) => {
-      const isHigh = item.discount >= 50;
       container.insertAdjacentHTML("beforeend", `
-        <div class="product" style="animation-delay:${Math.min(i * 30, 400)}ms">
-          ${item.discount ? `<span class="badge ${isHigh ? 'high' : ''}">-${item.discount}%</span>` : ""}
+        <div class="product" style="animation-delay:${Math.min(i*30,400)}ms">
+          ${item.discount ? `<span class="badge ${item.discount >= 50 ? 'high' : ''}">-${item.discount}%</span>` : ""}
           <div class="img-wrap">
-            <img
-              src="${item.image}"
-              alt="${escapeHtml(item.title)}"
-              loading="lazy"
-              onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2280%22%3E📦%3C/text%3E%3C/svg%3E'"
-            >
+            <img src="${item.image}" alt="${esc(item.title)}" loading="lazy"
+              onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2280%22%3E%F0%9F%93%A6%3C/text%3E%3C/svg%3E'">
           </div>
           <div class="card-body">
-            <div class="title">${escapeHtml(item.title)}</div>
+            <div class="title">${esc(item.title)}</div>
             <div class="prices">
-              ${item.original && item.original !== item.promo
-                ? `<span class="price-original">${item.original.toFixed(2)} €</span>`
-                : ""}
-              ${item.promo
-                ? `<span class="price-promo">${item.promo.toFixed(2)} €</span>`
-                : ""}
+              ${item.original && item.original !== item.promo ? `<span class="price-original">${item.original.toFixed(2)} €</span>` : ""}
+              ${item.promo ? `<span class="price-promo">${item.promo.toFixed(2)} €</span>` : ""}
             </div>
-            <a class="btn-buy" href="${item.link}" target="_blank" rel="noopener sponsored">
-              🛒 Ver Oferta
-            </a>
+            <a class="btn-buy" href="${item.link}" target="_blank" rel="noopener sponsored">🛒 Ver Oferta</a>
           </div>
         </div>`);
     });
@@ -495,14 +238,11 @@
 
   function buildFilters() {
     const cats = ["all", ...new Set(allProducts.map(p => p.category).filter(Boolean))];
-    const filtersEl = document.getElementById("filters");
-    filtersEl.style.display = "flex";
-    filtersEl.innerHTML = cats.map(cat => `
-      <button
-        class="filter-btn ${cat === activeCategory ? 'active' : ''}"
-        data-cat="${cat}"
-        onclick="filterBy('${cat}', this)"
-      >${cat === "all" ? "Todas" : cat}</button>
+    const el   = document.getElementById("filters");
+    el.style.display = "flex";
+    el.innerHTML = cats.map(cat => `
+      <button class="filter-btn ${cat === activeCategory ? 'active' : ''}"
+        onclick="filterBy('${esc(cat)}', this)">${cat === "all" ? "Todas" : esc(cat)}</button>
     `).join("");
   }
 
@@ -510,24 +250,18 @@
     activeCategory = cat;
     document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
-    const filtered = cat === "all" ? allProducts : allProducts.filter(p => p.category === cat);
-    renderProducts(filtered);
+    renderProducts(cat === "all" ? allProducts : allProducts.filter(p => p.category === cat));
   }
 
-  function parsePrice(value) {
-    if (!value && value !== 0) return null;
-    if (typeof value === "number") return value;
-    const cleaned = String(value).replace(/[€$£\s]/g, "").replace(",", ".");
-    const num = parseFloat(cleaned);
-    return isNaN(num) ? null : num;
+  function parsePrice(v) {
+    if (!v && v !== 0) return null;
+    if (typeof v === "number") return v;
+    const n = parseFloat(String(v).replace(/[€$£\s]/g,"").replace(",","."));
+    return isNaN(n) ? null : n;
   }
 
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
+  function esc(s) {
+    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
   }
 
   loadProducts();
